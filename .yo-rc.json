@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "20.18.0",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.24.0"
+    },
+    "version": "1.20.0",
+    "libraryName": "flip-book",
+    "libraryId": "07d528a7-8e56-4f99-be31-040dcb5c4578",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "flip-book",
+    "solutionShortDescription": "flip-book description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

@@ -1,0 +1,49 @@
+.flipbookContainer {
+  width: 400px; // Set the width of the flipbook container
+  height: 300px; // Set the height of the flipbook container
+  margin: 0 auto; // Center the flipbook container
+}
+
+.flipbook {
+  width: 100%; // Set width to 100% to fill the container
+  height: 100%; // Set height to 100% to fill the container
+  position: relative; // Ensure the position is relative for absolute positioning of pages
+}
+
+.page {
+  width: 400px; // Set the width of each page
+  height: 300px; // Set the height of each page
+  position: absolute; // Position pages absolutely
+  overflow: hidden; // Hide overflow for clean appearance
+}
+
+.page img {
+  width: 100%; // Make image responsive to page width
+  height: 100%; // Make image responsive to page height
+  object-fit: cover; // Ensure the image covers the page area
+}
+
+
+/* Navigation button container */
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+  margin: 10px auto 0;
+}
+
+/* Styling for navigation buttons */
+.navigation button {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.navigation button:hover {
+  background-color: #005a9e;
+}
