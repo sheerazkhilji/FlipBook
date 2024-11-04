@@ -28,7 +28,7 @@ export default class FbWebPart extends BaseClientSideWebPart<IFbWebPartProps> {
   private loadImagesFromLibrary(): void {
     const libraryName = 'TestFolder'; // Update to your document library name if needed
     const query = `/_api/web/lists/getbytitle('${libraryName}')/items?$select=FileRef,FileLeafRef&$filter=substringof('.jpg',FileLeafRef) or substringof('.png',FileLeafRef) or substringof('.gif',FileLeafRef)`;
-
+debugger;
     axios.get(this.context.pageContext.web.absoluteUrl + query, {
       headers: {
         Accept: 'application/json;odata=verbose'
@@ -78,35 +78,91 @@ export default class FbWebPart extends BaseClientSideWebPart<IFbWebPartProps> {
 
   private initializeFlipbook(): void {
     const flipbookElement = this.domElement.querySelector('#flipbook') as HTMLElement;
+    const prevButton = this.domElement.querySelector('#prevPage') as HTMLButtonElement;
+    const nextButton = this.domElement.querySelector('#nextPage') as HTMLButtonElement;
+    const flipbookContainer = this.domElement.querySelector('#flipbookContainer') as HTMLElement; // Assuming there's a container with this ID
 
-    if (flipbookElement) {
+    if (flipbookElement && prevButton && nextButton) {
+        // Center the flipbook on initialization
+      //  this.centerFlipbook(flipbookElement);
+
         // Initialize the flipbook with jQuery
         (jQuery as any)(flipbookElement).turn({
-            width: 400,
-            height: 300,
-            autoCenter: true,
+            width: 600,         // Increased width for better viewing
+            height: 450,        // Increased height for better viewing
+            autoCenter: true,  // Set to false to manually handle centering
+            display: 'double',   // Double-page view for a realistic book effect
+            duration: 1000,     // Slows down the page-turning animation for visual appeal
+            elevation: 50,      // Adds 3D depth to the flip effect
             // Add navigation if available
-            next: () => (jQuery as any)(flipbookElement).turn('next'),
-            previous: () => (jQuery as any)(flipbookElement).turn('previous')
+            next: () => {
+                (jQuery as any)(flipbookElement).turn('next');
+                this.checkLastPageAndCenter(flipbookElement, flipbookContainer);
+            },
+            previous: () => {
+                (jQuery as any)(flipbookElement).turn('previous');
+            },
+            when: {
+                // Callback when the flipbook is closed
+                closed: () => {
+                    // Center the flipbook when it is closed
+               //     this.centerFlipbook(flipbookElement);
+                }
+            }
         });
-
-        // Set up navigation buttons
-        const prevButton = this.domElement.querySelector('#prevPage') as HTMLButtonElement;
-        const nextButton = this.domElement.querySelector('#nextPage') as HTMLButtonElement;
 
         // Go to the previous page
         prevButton.addEventListener('click', () => {
             (jQuery as any)(flipbookElement).turn('previous');
+            this.checkLastPageAndCenter(flipbookElement, flipbookContainer);
         });
 
         // Go to the next page
         nextButton.addEventListener('click', () => {
             (jQuery as any)(flipbookElement).turn('next');
+            this.checkLastPageAndCenter(flipbookElement, flipbookContainer);
         });
+
+
     } else {
-        console.error('Flipbook element not found');
+        console.error('Flipbook element or navigation buttons not found');
     }
 }
+
+// Method to check if the current page is the last page and center the flipbook
+private checkLastPageAndCenter(flipbookElement: HTMLElement, flipbookContainer: HTMLElement): void {
+    const totalPages = (jQuery as any)(flipbookElement).turn('pages');
+    const currentPage = (jQuery as any)(flipbookElement).turn('page');
+debugger;
+    if (currentPage === totalPages) {
+        // Center the flipbook when on the last page
+     //   this.centerFlipbook(flipbookElement);
+        // Set flipbookContainer to left: 200px
+        flipbookElement.style.left = '200px';
+    } else {
+        // Reset to default left positioning if not on the last page
+        flipbookElement.style.left = ''; // or set to a specific default value if needed
+    }
+}
+
+// Method to center the flipbook
+// private centerFlipbook(flipbookElement: HTMLElement): void {
+//     const container = flipbookElement.parentElement; // Get the container of the flipbook
+//     if (container) {
+//         const containerWidth = container.clientWidth;
+//         const containerHeight = container.clientHeight;
+//         const flipbookWidth = flipbookElement.offsetWidth;
+//         const flipbookHeight = flipbookElement.offsetHeight;
+
+//         // Calculate the new position for centering
+//         const left = (containerWidth - flipbookWidth) / 2;
+//         const top = (containerHeight - flipbookHeight) / 2;
+
+//         // Set the position of the flipbook
+//         flipbookElement.style.left = `${left}px`;
+//         flipbookElement.style.top = `${top}px`;
+//     }
+// }
 
 
   protected get dataVersion(): Version {
